@@ -3,6 +3,9 @@
 // enable dsl2
 nextflow.enable.dsl = 2
 
+// enable conda
+conda.enabled = true
+
 // include modules
 include {printHelp} from './modules/help.nf'
 include {makeFastqSearchPath} from './modules/util.nf'
