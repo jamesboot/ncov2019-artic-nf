@@ -62,7 +62,7 @@ process readMapping {
     publishDir "${params.outdir}/${task.process.replaceAll(":","_")}", pattern: "${sampleName}.sorted.bam", mode: 'copy'
 
     input:
-        tuple sampleName, path(forward), path(reverse), path(ref), path("*")
+        tuple val(sampleName), path(forward), path(reverse), path(ref), path("*")
 
     output:
         tuple(sampleName, path("${sampleName}.sorted.bam"))
@@ -82,11 +82,11 @@ process trimPrimerSequences {
     publishDir "${params.outdir}/${task.process.replaceAll(":","_")}", pattern: "${sampleName}.mapped.primertrimmed.sorted.bam", mode: 'copy'
 
     input:
-    tuple sampleName, path(bam), path(bedfile)
+    tuple val(sampleName), path(bam), path(bedfile)
 
     output:
-    tuple sampleName, path("${sampleName}.mapped.bam"), emit: mapped
-    tuple sampleName, path("${sampleName}.mapped.primertrimmed.sorted.bam" ), emit: ptrim
+    tuple val(sampleName), path("${sampleName}.mapped.bam"), emit: mapped
+    tuple val(sampleName), path("${sampleName}.mapped.primertrimmed.sorted.bam" ), emit: ptrim
 
     script:
     if (params.allowNoprimer){
@@ -131,7 +131,7 @@ process callVariants {
     tuple(sampleName, path(bam), path(ref))
 
     output:
-    tuple sampleName, path("${sampleName}.variants.tsv"), emit: variants
+    tuple val(sampleName), path("${sampleName}.variants.tsv"), emit: variants
 
     script:
         """
@@ -169,10 +169,10 @@ process cramToFastq {
     */
 
     input:
-        tuple sampleName, file(cram)
+        tuple val(sampleName), file(cram)
 
     output:
-        tuple sampleName, path("${sampleName}_1.fastq.gz"), path("${sampleName}_2.fastq.gz")
+        tuple val(sampleName), path("${sampleName}_1.fastq.gz"), path("${sampleName}_2.fastq.gz")
 
     script:
         """
