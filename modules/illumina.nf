@@ -12,10 +12,10 @@ process readTrimming {
     cpus 2
 
     input:
-    tuple(sampleName, path(forward), path(reverse))
+    tuple(val(sampleName), path(forward), path(reverse))
 
     output:
-    tuple(sampleName, path("*_val_1.fq.gz"), path("*_val_2.fq.gz")) optional true
+    tuple(val(sampleName), path("*_val_1.fq.gz"), path("*_val_2.fq.gz")) optional true
 
     script:
     """
@@ -65,7 +65,7 @@ process readMapping {
         tuple val(sampleName), path(forward), path(reverse), path(ref), path("*")
 
     output:
-        tuple(sampleName, path("${sampleName}.sorted.bam"))
+        tuple(val(sampleName), path("${sampleName}.sorted.bam"))
 
     script:
       """
@@ -128,7 +128,7 @@ process callVariants {
     publishDir "${params.outdir}/${task.process.replaceAll(":","_")}", pattern: "${sampleName}.variants.tsv", mode: 'copy'
 
     input:
-    tuple(sampleName, path(bam), path(ref))
+    tuple(val(sampleName), path(bam), path(ref))
 
     output:
     tuple val(sampleName), path("${sampleName}.variants.tsv"), emit: variants
@@ -147,10 +147,10 @@ process makeConsensus {
     publishDir "${params.outdir}/${task.process.replaceAll(":","_")}", pattern: "${sampleName}.primertrimmed.consensus.fa", mode: 'copy'
 
     input:
-        tuple(sampleName, path(bam))
+        tuple(val(sampleName), path(bam))
 
     output:
-        tuple(sampleName, path("${sampleName}.primertrimmed.consensus.fa"))
+        tuple(val(sampleName), path("${sampleName}.primertrimmed.consensus.fa"))
 
     script:
         """
